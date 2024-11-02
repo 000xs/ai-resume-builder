@@ -1,12 +1,41 @@
-// pages/api/generate-resume.js
-import { Configuration, OpenAIApi } from "openai";
+// pages/api/generate-cover-letter.js
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+dotenv.config();
+
+const geminiApiKey = process.env.GEMINI_API_KEY; // Ensure the correct environment variable name
+const googleAI = new GoogleGenerativeAI(geminiApiKey);
+const geminiConfig = {
+  temperature: 0.9,
+  topP: 1,
+  topK: 1,
+  maxOutputTokens: 4096,
+};
+
+const geminiModel = googleAI.getGenerativeModel({
+  model: "gemini-pro",
+  geminiConfig,
 });
 
-const openai = new OpenAIApi(configuration);
-
 export default async function handler(req, res) {
-  res.status(200).json({ message: "Connected TO resume builder!" });
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+
+  const { jobDescription, name, skills } = req.body;
+
+  // Construct the prompt for the AI model
+  const prompt = `Write a cover letter for ${name} for a job requiring skills in ${skills}. Job description: ${jobDescription}.`;
+
+  try {
+    // Generate the cover letter text
+    const result = await geminiModel.generateContent(prompt);
+    const response = result.response; // Adjust according to the API response structure
+    res.status(200).json({ result: response.text() }); // Ensure this matches how your API returns text
+  } catch (error) {
+    console.error("Response error:", error);
+    res.status(500).json({ error: "Failed to generate cover letter" });
+  }
 }
