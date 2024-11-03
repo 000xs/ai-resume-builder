@@ -1,13 +1,15 @@
-// pages/api/generate-pdf.js
 import { generateResume } from "@/utils/templets";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
-import { PDFDocument, rgb } from 'pdf-lib'; // Ensure you have pdf-lib installed
- 
+import { PDFDocument } from 'pdf-lib';
+import path from 'path';
+import fs from 'fs';
+import { uplodeBucket } from '@/utils/uplode'; // Ensure correct import path
 
 dotenv.config();
 
-const geminiApiKey = process.env.GEMINI_API_KEY; // Ensure the correct environment variable name
+ 
+const geminiApiKey = process.env.GEMINI_API_KEY; 
 const googleAI = new GoogleGenerativeAI(geminiApiKey);
 const geminiConfig = {
   temperature: 0.9,
@@ -27,9 +29,8 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { resumeData } = req.body;
+  const { resumeData, selectedTemplate } = req.body;
 
-  // Construct the prompt for the AI model
   const prompt = `
     Create a resume for ${resumeData.fullName}. 
     Contact Info: ${resumeData.contactInfo.email}, ${resumeData.contactInfo.phone}. 
@@ -42,29 +43,27 @@ export default async function handler(req, res) {
   `;
 
   try {
-     // Generate the resume text using the AI model
-     const result = await GeminiModel.generateContent(prompt);
-     const resumeText = result.response.text; // Adjust according to the actual API response structure
+    const result = await geminiModel.generateContent(prompt);
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([600, 400]);
 
-     // Optionally, merge resumeText into resumeData if needed
-     resumeData.careerObjective = resumeText; // Example of using AI-generated text
+    await generateResume(pdfDoc, page, resumeData, selectedTemplate);
 
-     // Create a PDF document
-     const pdfDoc = await PDFDocument.create();
-     const page = pdfDoc.addPage([600, 400]);
+    const pdfBytes = await pdfDoc.save();
+    
+    const tempFilePath = path.join(__dirname, 'temp-resume.pdf');
+    fs.writeFileSync(tempFilePath, pdfBytes); // Save PDF to temp file
 
-     // Generate the resume using the selected template
-     await generateResume(pdfDoc, page, resumeData, selectedTemplate);
+    const fileStream = fs.createReadStream(tempFilePath); // Create read stream for upload
 
-     // Serialize the PDFDocument to bytes
-     const pdfBytes = await pdfDoc.save();
+    console.log('UplodeBucket Function:', uplodeBucket); // Debugging log
 
-     // Set the response headers to indicate a PDF file
-     res.setHeader('Content-Type', 'application/pdf');
-     res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
-     res.status(200).send(pdfBytes);
+    await uplodeBucket(fileStream); // Upload to bucket
+
+    res.status(200).json({ message: "File uploaded successfully" });
+    
   } catch (error) {
     console.error("Error generating content:", error);
-    res.status(500).json({ error: "Failed to generate PDF" });
+    res.status(500).json({ error: "Failed to generate or upload PDF", details: error.message });
   }
 }
