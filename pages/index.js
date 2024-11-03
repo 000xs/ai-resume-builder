@@ -1,13 +1,15 @@
-// index laning page
+// pages/index.js
+import Link from "next/link";
 
-import Navigationbar from "@/components/Navigationbar";
-
-const Home = () => {
+export default function Home() {
   return (
-    <main className="bg-white w-auto h-auto">
-      <Navigationbar />
-      <h1>Landing Page</h1>
-    </main>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      <h1 className="text-5xl font-bold mb-8">Welcome to the AI Resume Builder</h1>
+      <Link href="/select-template">
+        <button className="px-6 py-3 bg-blue-500 text-white rounded-lg font-semibold">
+          Get Started
+        </button>
+      </Link>
+    </div>
   );
 }
-export default Home;
