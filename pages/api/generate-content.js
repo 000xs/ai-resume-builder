@@ -2,13 +2,17 @@ import { generateResume } from "@/utils/templets";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 import { PDFDocument } from 'pdf-lib';
-import path from 'path';
-import fs from 'fs';
-import { uplodeBucket } from '@/utils/uplode'; // Ensure correct import path
+import { Client, Storage } from 'appwrite';
 
 dotenv.config();
 
- 
+const client = new Client();
+const storage = new Storage(client);
+
+client
+  .setEndpoint(process.env.APPWRITE_ENDPOINT) // Your API Endpoint
+  .setProject(process.env.APPWRITE_PROJECT_ID); // Your project ID
+
 const geminiApiKey = process.env.GEMINI_API_KEY; 
 const googleAI = new GoogleGenerativeAI(geminiApiKey);
 const geminiConfig = {
@@ -49,19 +53,17 @@ export default async function handler(req, res) {
 
     await generateResume(pdfDoc, page, resumeData, selectedTemplate);
 
+    // Serialize the PDFDocument to bytes
     const pdfBytes = await pdfDoc.save();
+   
+
+    // Set response headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=resume.pdf');
     
-    const tempFilePath = path.join(__dirname, 'temp-resume.pdf');
-    fs.writeFileSync(tempFilePath, pdfBytes); // Save PDF to temp file
+    // Send the PDF bytes as a response
+    res.status(200).send(Buffer.from(pdfBytes)); // Ensure you are sending a Buffer
 
-    const fileStream = fs.createReadStream(tempFilePath); // Create read stream for upload
-
-    console.log('UplodeBucket Function:', uplodeBucket); // Debugging log
-
-    await uplodeBucket(fileStream); // Upload to bucket
-
-    res.status(200).json({ message: "File uploaded successfully" });
-    
   } catch (error) {
     console.error("Error generating content:", error);
     res.status(500).json({ error: "Failed to generate or upload PDF", details: error.message });

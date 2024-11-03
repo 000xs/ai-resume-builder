@@ -1,43 +1,68 @@
-import { uplodeBucket } from '@/utils/uplode';
-import React, { useState } from 'react';
+import axios from "axios"
 
-const ImageUploader = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+const uplode = () => {
+    const resume = {
+        "resumeData": {
+            "fullName": "John Doe",
+            "contactInfo": {
+                "email": "john.doe@example.com",
+                "phone": "+1234567890"
+            },
+            "careerObjective": "Detail-oriented software engineer with 5+ years of experience in full-stack development, looking to leverage expertise in building scalable applications.",
+            "workExperience": [
+                {
+                    "jobTitle": "Senior Software Engineer",
+                    "companyName": "Tech Solutions Inc.",
+                    "years": "2019 - Present",
+                    "description": "Lead a team of developers in building enterprise-level applications, focusing on optimizing user experience and performance."
+                },
+                {
+                    "jobTitle": "Software Engineer",
+                    "companyName": "Innovatech",
+                    "years": "2016 - 2019",
+                    "description": "Contributed to various projects including web applications and RESTful services, collaborating closely with cross-functional teams."
+                }
+            ],
+            "education": [
+                {
+                    "degree": "Bachelor of Science in Computer Science",
+                    "institution": "University of Example",
+                    "yearsAttended": "2012 - 2016"
+                }
+            ],
+            "skills": [
+                "JavaScript",
+                "React",
+                "Node.js",
+                "Python",
+                "CSS"
+            ],
+            "certifications": [
+                "Certified Scrum Master",
+                "AWS Certified Solutions Architect"
+            ],
+            "internships": [
+                {
+                    "jobTitle": "Intern Developer",
+                    "companyName": "Intern Co.",
+                    "years": "2015",
+                    "description": "Assisted in the development of a web-based project management tool, focusing on frontend development."
+                }
+            ]
+        },
+        "selectedTemplate": "modern"
 
-  const handleFileChange = async(event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file)); // Create a preview URL
-    
-    try {
-        alert('Uploading file...');
-        const response = await uplodeBucket(file);
-        console.log('Upload successful:', response);
-        alert('File uploaded successfully!');
-      } catch (error) {
-        console.error('Error uploading file:', error);
-        alert('Failed to upload file.');
-      }
     }
-  };
 
- 
-
-  
-  return (
-    <div className="image-uploader">
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      {previewUrl && (
+    const getData = async () => {
+        const result = await axios.post("/api/generate-content", resume);
+         
+    }
+    return (
         <div>
-          <h3>Image Preview:</h3>
-          <img src={previewUrl} alt="Image Preview" style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} />
+            <button onClick={getData}>get pdf</button>
         </div>
-      )}
-       
-    </div>
-  );
-};
+    )
+}
 
-export default ImageUploader;
+export default uplode
