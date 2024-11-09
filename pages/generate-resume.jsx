@@ -1,10 +1,37 @@
 import Navigationbar from "@/components/Navigationbar";
 import { templates } from "@/data/templates";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import { FileText, Check, Loader2 } from 'lucide-react'
+import dynamic from 'next/dynamic';
+
+const GeneratePDF = dynamic(() => import('@/components/GeneratePDF'), { ssr: false });
+const CVTemplate = dynamic(() => import('@/components/CVTemplate'), { ssr: false });
+
+
 
 const GenerateResume = () => {
-  const [jsonData, setJsonData] = useState({});
+  const [userData, setJsonData] = useState({
+    personalData: {
+      fullname: '',
+      image: '',
+      location: '',
+      tel: '',
+      email: '',
+      linkindin: '',
+      portfolio: ''
+    },
+    jobExperience: {
+      jobTitle: '',
+      companyName: '',
+      companyLocation: '',
+      datesEmployment: ''
+    },
+    skills: [], // Initialize as an empty array
+    education: [], // Initialize as an empty array
+    template: '1'
+  });
   const router = useRouter();
   const { step } = router.query;
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -82,7 +109,36 @@ const GenerateResume = () => {
     const newSkillsArray = skillsArray.filter((_, i) => i !== index);
     setSkillsArray(newSkillsArray); // Remove skill from the array
   };
-  const createJsonData = () => {
+  const [progress, setProgress] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+
+  const steps = [
+    'Analyzing your information',
+    'Crafting your professional summary',
+    'Organizing your work experience',
+    'Highlighting your skills',
+    'Polishing your resume'
+  ]
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          clearInterval(timer)
+          return 100
+        }
+        const newProgress = Math.min(oldProgress + 1, 100)
+        setCurrentStep(Math.floor((newProgress / 100) * steps.length))
+        return newProgress
+      })
+    }, 50)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
+  const createModernResume = async () => {
     setJsonData(
       {
         "personalData": {
@@ -107,30 +163,7 @@ const GenerateResume = () => {
 
       }
     )
-
-  }
-
-  const createModernResume = async () => {
     // call backend api to create resume
-    try {
-      const response = await axios.get('/api/create-resume', jsonData, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      return response.data;
-    } catch (error) {
-      if (error.response) {
-        console.error("Error:", error.response.data.message || "Something went wrong");
-        throw new Error(error.response.data.message || "Something went wrong");
-      } else if (error.request) {
-        console.error("No response received from the server");
-        throw new Error("No response received from the server");
-      } else {
-        console.error("Request setup error:", error.message);
-        throw new Error("Request setup error");
-      }
-    }
 
   }
   return (
@@ -358,7 +391,7 @@ const GenerateResume = () => {
                 className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
                 onClick={() => {
                   router.push(`/generate-resume?step=6&templateId=${router.query.templateId}`)
-                  createJsonData()
+                  createModernResume()
                 }}
               >
                 Next
@@ -368,10 +401,47 @@ const GenerateResume = () => {
         )}
         {step === '6' && (
           <Fragment>
-            <div className="px-28">
-              ..procecing
-              <img src={jsonData.personalData.image} alt="" srcset="" />
+            <div className="min-h-screen bg-purple-50 flex flex-col items-center justify-center p-4">
+              <div className="w-full max-w-md">
+                <div className="text-center mb-8">
+                  <FileText className="w-16 h-16 mx-auto mb-4 text-purple-600" />
+                  <h1 className="text-2xl font-bold text-gray-900 mb-2">Generating Your Resume</h1>
+                  <p className="text-gray-600">Please wait while we create your professional resume</p>
+                </div>
 
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                  <div className="mb-4">
+                    <div className="h-2 bg-purple-100 rounded-full">
+                      <div
+                        className="h-2 bg-purple-600 rounded-full transition-all duration-500 ease-out"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {steps.map((step, index) => (
+                      <div key={index} className="flex items-center">
+                        {index < currentStep ? (
+                          <Check className="w-5 h-5 text-green-500 mr-3" />
+                        ) : index === currentStep ? (
+                          <Loader2 className="w-5 h-5 text-purple-600 animate-spin mr-3" />
+                        ) : (
+                          <div className="w-5 h-5 border-2 border-gray-300 rounded-full mr-3"></div>
+                        )}
+                        <span className={index <= currentStep ? 'text-gray-900' : 'text-gray-400'}>
+                          {step}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-center text-gray-600 mt-8">
+                  This may take a few moments. Thank you for your patience!
+                </p>
+                <CVTemplate userData={userData} />
+              </div>
             </div>
           </Fragment>
         )}
