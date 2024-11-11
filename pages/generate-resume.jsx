@@ -5,9 +5,12 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { FileText, Check, Loader2 } from 'lucide-react'
 import dynamic from 'next/dynamic';
+ 
 
 const GeneratePDF = dynamic(() => import('@/components/GeneratePDF'), { ssr: false });
 const CVTemplate = dynamic(() => import('@/components/CVTemplate'), { ssr: false });
+const Basic = dynamic(() => import('@/components/resumes/basic'), { ssr: false });
+const Modern = dynamic(() => import('@/components/resumes/modern'), { ssr: false });
 
 
 
@@ -22,14 +25,10 @@ const GenerateResume = () => {
       linkindin: '',
       portfolio: ''
     },
-    jobExperience: {
-      jobTitle: '',
-      companyName: '',
-      companyLocation: '',
-      datesEmployment: ''
-    },
-    skills: [], // Initialize as an empty array
-    education: [], // Initialize as an empty array
+    jobExperience: [],
+    role: '',
+    skills: [],
+    education: [],
     template: '1'
   });
   const router = useRouter();
@@ -52,25 +51,41 @@ const GenerateResume = () => {
       reader.readAsDataURL(file);
     }
   };
-  // State variables for education fields
-  const initialEducationFields = [
-    { degreeName: '', institution: '', graduation: '' },
-  ];
+  //job exspresince
+  // Job Experience State
+  const initialJobFields = [{ jobTitle: '', companyName: '', companyLocation: '', description: '', jobStart: '', jobEnd: '' }];
+  const [jobFields, setJobFields] = useState(initialJobFields);
+
+  // Function to handle adding a new job experience field
+  const handleJobAddField = () => {
+    setJobFields([...jobFields, { jobTitle: '', companyName: '', companyLocation: '', description: '', jobStart: '', jobEnd: '' }]);
+  };
+
+  // Function to handle input changes in job experience fields
+  const handleJobInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const updatedJobFields = [...jobFields];
+    updatedJobFields[index][name] = value; // Update the specific field based on the input name
+    setJobFields(updatedJobFields);
+  };
+
+  // Education State
+  const initialEducationFields = [{ degreeName: '', institution: '', start: '', graduation: '' }];
   const [educationFields, setEducationFields] = useState(initialEducationFields);
 
   // Function to handle adding a new education field
-  const handleAddField = () => {
-    setEducationFields([...educationFields, { degreeName: '', institution: '', graduation: '' }]);
+  const handleEduAddField = () => {
+    setEducationFields([...educationFields, { degreeName: '', institution: '', start: '', graduation: '' }]);
   };
 
   // Function to handle input changes in education fields
   const handleEduInputChange = (index, event) => {
     const { name, value } = event.target;
-    const updatedFields = [...educationFields];
-    updatedFields[index][name] = value; // Update the specific field based on the input name
-    setEducationFields(updatedFields);
-
+    const updatedEducationFields = [...educationFields];
+    updatedEducationFields[index][name] = value; // Update the specific field based on the input name
+    setEducationFields(updatedEducationFields);
   };
+
   //personal information
   // const [image] = useState(""); before edcleard
   const [fullname, setFullname] = useState('');
@@ -79,12 +94,9 @@ const GenerateResume = () => {
   const [email, setEmail] = useState('');
   const [linkindin, setLinkindin] = useState('');
   const [portfolio, setPortfolio] = useState('');
+  const [role, setRole] = useState('')
   // Handle input changes for text fields 
-  //job experience
-  const [jobTitle, setJobTitle] = useState('');
-  const [companyName, setCompanyName] = useState('');
-  const [companyLocation, setCompanyLocation] = useState('');
-  const [datesEmployment, setDatesEmployment] = useState('');
+
 
   const handleInputChange = (setter) => (event) => {
     setter(event.target.value);
@@ -137,6 +149,7 @@ const GenerateResume = () => {
       clearInterval(timer)
     }
   }, [])
+  //  / Output: January 2023
 
   const createModernResume = async () => {
     setJsonData(
@@ -150,13 +163,8 @@ const GenerateResume = () => {
           "linkindin": linkindin,
           "portfolio": portfolio
         },
-        "JobExperience":
-        {
-          "jobTitle": jobTitle,
-          "companyName": companyName,
-          "companyLocation": companyLocation,
-          "datesEmployment": datesEmployment
-        },
+        "JobExperience": jobFields,
+        "role": role,
         "Skills": skillsArray,
         "Education": educationFields,
         "Template": selectedTemplate
@@ -180,14 +188,14 @@ const GenerateResume = () => {
                     }`}
                     onClick={() => handleTemplateSelect(item)}
                   >
-                    <img src={item.previewImage} width={128} height={226} />
+                    <img src={item.previewImage} width={186} height={326} />
                     <h2 className="text-xl">{item.name}</h2>
 
                   </div>
                 ))}
               </div>
               <button className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
-                onClick={() => router.push(`/generate-resume?step=2&templateId=${selectedTemplate}`)}
+                onClick={() => router.push(`/generate-resume?step=2`)}
               >
                 Next
               </button>
@@ -258,7 +266,7 @@ const GenerateResume = () => {
               </div>
             </div>
             <button className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
-              onClick={() => { router.push(`/generate-resume?step=3&templateId=${selectedTemplate}&fullname=${encodeURIComponent(fullname)}&location=${encodeURIComponent(location)}&tel=${encodeURIComponent(tel)}&email=${encodeURIComponent(email)}&linkdin=${encodeURIComponent(linkindin)}&portfolio=${encodeURIComponent(portfolio)}`); }}
+              onClick={() => { router.push(`/generate-resume?step=3`); }}
             >
               Next
             </button>
@@ -266,7 +274,13 @@ const GenerateResume = () => {
         </Fragment>}
         {step === '3' && <Fragment>
           <div className="container-templete px-16 space-y-4 py-10 flex flex-col items-center w-full">
-            <h1 className=" text-2xl">Skils</h1>
+            <h1 className=" text-2xl">Role & Skils</h1>
+            <div className="form flex flex-col justify-between w-full">
+              <label htmlFor="role">Role</label>
+              <input type="text" placeholder="Type Role, ex: Software Engineer"
+                value={role} onChange={handleInputChange(setRole)}
+                className="border rounded-sm border-black px-4 py-1.5 w-full" />
+            </div>
             <div className="form flex flex-col justify-between w-full">
               <div className="flex flex-wrap gap-2 mb-4">
                 {skillsArray.map((skill, index) => (
@@ -281,6 +295,7 @@ const GenerateResume = () => {
                   </span>
                 ))}
               </div>
+              <label htmlFor='skills'>Skills</label>
               <input
                 type="text"
                 value={skill}
@@ -293,7 +308,7 @@ const GenerateResume = () => {
 
             <button className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
               // onClick={() => router.push(`/generate-resume?step=4&templateId=${selectedTemplate}&skils=${skillsArray.join(',')}`)}
-              onClick={() => { router.push(`/generate-resume?step=4&templateId=${selectedTemplate}&fullname=${encodeURIComponent(fullname)}&location=${encodeURIComponent(location)}&tel=${encodeURIComponent(tel)}&email=${encodeURIComponent(email)}&linkdin=${encodeURIComponent(linkindin)}&portfolio=${encodeURIComponent(portfolio)}&skils=${skillsArray.join(',')}`); }}
+              onClick={() => { router.push(`/generate-resume?step=4`); }}
             >
               Next
             </button>
@@ -302,29 +317,51 @@ const GenerateResume = () => {
         {step === '4' &&
           <Fragment>
             <div className="container-templete px-16 space-y-4 py-10 flex flex-col items-center w-full">
-              <h1 className=" text-2xl">Professional Experience</h1>
-              <div className="form flex flex-col justify-between  w-[100%]">
-                <div className="right flex flex-col  justify-start items-start space-y-4">
-                  <div className="w-full">
-                    <label htmlFor="fullname" className="font-semibold">Job Title</label>
-                    <input type="text" value={jobTitle} onChange={handleInputChange(setJobTitle)} name="Job Title" id="Job Title" className="border rounded-sm border-black px-4 py-1.5 w-[100%]" placeholder="Job Title" required />
-                  </div>
-                  <div className="w-full">
-                    <label htmlFor="c-name" className="font-semibold">Company Name</label>
-                    <input type="text" value={companyName} onChange={handleInputChange(setCompanyName)} name="c-name" id="c-name" className="border rounded-sm border-black px-4 py-1.5 w-[100%]" placeholder="Company Name" required />
-                  </div>
-                  <div className="w-[100%]">
-                    <label htmlFor="Location" className="font-semibold">Location</label>
-                    <input type="text" value={companyLocation} onChange={handleInputChange(setCompanyLocation)} name="Location" id="Location" className="border rounded-sm border-black px-4  py-1.5 w-[100%] " placeholder="Location" required />
-                  </div>
-                  <div className="w-[100%]">
-                    <label htmlFor="date" className="font-semibold">Dates of Employment (MM/YYYY format)</label>
-                    <input type="date" value={datesEmployment} onChange={handleInputChange(setDatesEmployment)} name="date" id="date" className="border rounded-sm border-black px-4 py-1.5 w-[100%]" placeholder="Dates of Employment (MM/YYYY format)" required />
-                  </div>
+              <h1 className="text-2xl">Profenoal Exspreince</h1>
+              <div className="form flex flex-col justify-between w-full">
+                <div className="right flex flex-col justify-start items-start space-y-4">
+                  {jobFields.map((field, index) => (
+                    <div key={index} className="w-full flex flex-col space-y-2 border px-4 py-4">
+                      <div className="w-full">
+                        <label htmlFor={`jobTitle${index}`} className="font-semibold">Job Title/ Role</label>
+                        <input type="text" name="jobTitle" id={`jobTitle${index}`} className="border rounded-sm border-black px-4 py-1.5 w-full" placeholder="Job Title/Role" value={field.jobTitle} onChange={(e) => handleJobInputChange(index, e)} />
+                      </div>
+                      <div className="w-full">
+                        <label htmlFor={`companyName${index}`} className="font-semibold">Company Name</label>
+                        <input type="text" name="companyName" id={`companyName${index}`} className="border rounded-sm border-black px-4 py-1.5 w-full" placeholder="Company Name" value={field.companyName} onChange={(e) => handleJobInputChange(index, e)} />
+                      </div>
+                      <div className="w-full">
+                        <label htmlFor={`companyLocation${index}`} className="font-semibold">Company Location</label>
+                        <input type="text" name="companyLocation" id={`companyLocation${index}`} className="border rounded-sm border-black px-4 py-1.5 w-full" placeholder="Location" value={field.companyLocation} onChange={(e) => handleJobInputChange(index, e)} />
+                      </div>
+                      <div className="w-full">
+                        <label htmlFor={`description${index}`} className="font-semibold">Description</label>
+                        <input type="text" name="description" id={`description${index}`} className="border rounded-sm border-black px-4 py-1.5 h-20 w-full" placeholder="Description" value={field.description} onChange={(e) => handleJobInputChange(index, e)} />
+                      </div>
+                      <div className="w-full flex flex-row space-x-4">
+                        <div className="w-full">
+                          <label htmlFor={`jobStart${index}`} className="font-semibold">Start Date</label>
+                          <input type="month" name="jobStart" id={`jobStart${index}`} className="border rounded-sm border-black px-4 py-1.5 w-full" value={field.jobStart} onChange={(e) => handleJobInputChange(index, e)} />
+                        </div>
+                        <div className="w-full">
+                          <label htmlFor={`jobEnd${index}`} className="font-semibold">End Date</label>
+                          <input type="month" name="jobEnd" id={`jobEnd${index}`} className="border rounded-sm border-black px-4 py-1.5 w-full" value={field.jobEnd} onChange={(e) => handleJobInputChange(index, e)} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleJobAddField}
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                  >
+                    + Add  EP Entry
+                  </button>
                 </div>
               </div>
+
               <button className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
-                onClick={() => { router.push(`/generate-resume?step=5&templateId=${selectedTemplate}&fullname=${encodeURIComponent(fullname)}&location=${encodeURIComponent(location)}&tel=${encodeURIComponent(tel)}&email=${encodeURIComponent(email)}&linkdin=${encodeURIComponent(linkindin)}&portfolio=${encodeURIComponent(portfolio)}&skils=${skillsArray.join(',')}&jobTitle=${encodeURIComponent(jobTitle)}&companyName=${encodeURIComponent(companyName)}&companyLocation=${encodeURIComponent(companyLocation)}&datesEmployment=${encodeURIComponent(datesEmployment)}`); }}
+                onClick={() => { router.push(`/generate-resume?step=5`) }}
               >
                 Next
               </button>
@@ -363,23 +400,39 @@ const GenerateResume = () => {
                           onChange={(e) => handleEduInputChange(index, e)}
                         />
                       </div>
-                      <div className="w-full">
-                        <label htmlFor={`graduation${index}`} className="font-semibold">Graduation Date</label>
-                        <input
-                          type="date"
-                          name="graduation"
-                          id={`graduation${index}`}
-                          className="border rounded-sm border-black px-4 py-1.5 w-full"
-                          placeholder="Graduation Date"
-                          value={field.graduation}
-                          onChange={(e) => handleEduInputChange(index, e)}
-                        />
+                      <div className="w-full flex flex-row space-x-4">
+
+                        <div className="w-full">
+                          <label htmlFor={`start${index}`} className="font-semibold">Start Date</label>
+                          <input
+                            type="month"
+                            name="start"
+                            id={`start${index}`}
+                            className="border rounded-sm border-black px-4 py-1.5 w-full"
+                            placeholder="Start Date"
+                            value={field.start}
+                            onChange={(e) => handleEduInputChange(index, e)}
+                          />
+                        </div>
+                        <div className="w-full">
+                          <label htmlFor={`graduation${index}`} className="font-semibold">Graduation Date</label>
+                          <input
+                            type="month"
+                            name="graduation"
+                            id={`graduation${index}`}
+                            className="border rounded-sm border-black px-4 py-1.5 w-full"
+                            placeholder="Graduation Date"
+                            value={field.graduation}
+                            onChange={(e) => handleEduInputChange(index, e)}
+                          />
+                        </div>
                       </div>
+
                     </div>
                   ))}
                   <button
                     type="button"
-                    onClick={handleAddField}
+                    onClick={handleEduAddField}
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                   >
                     + Add Another Education Entry
@@ -390,7 +443,7 @@ const GenerateResume = () => {
               <button
                 className="next bg-transparent border text-md px-4 end-0 border-black border-b-4 py-1 hover:border-b hover:border-t-4"
                 onClick={() => {
-                  router.push(`/generate-resume?step=6&templateId=${router.query.templateId}`)
+                  router.push(`/generate-resume?step=6`)
                   createModernResume()
                 }}
               >
@@ -440,7 +493,9 @@ const GenerateResume = () => {
                 <p className="text-center text-gray-600 mt-8">
                   This may take a few moments. Thank you for your patience!
                 </p>
-                <CVTemplate userData={userData} />
+                {/* <CVTemplate userData={userData} /> */}
+                {/* <Basic userData={userData} /> */}
+                <Modern userData={userData}/>
               </div>
             </div>
           </Fragment>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Resume Template</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .resume {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .left-column {
+            background: #2c2c2c;
+            color: white;
+            padding: 2rem;
+        }
+
+        .right-column {
+            padding: 2rem;
+            background: white;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .name-title {
+            margin-bottom: 2rem;
+        }
+
+        .name {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .title {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffffff99;
+            font-size: 0.9rem;
+        }
+
+        .skills-list, .language-list {
+            list-style: none;
+        }
+
+        .skills-list li, .language-list li {
+            margin-bottom: 0.5rem;
+            color: #ffffff99;
+            font-size: 0.9rem;
+        }
+
+        .experience-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .company {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .responsibilities {
+            list-style: disc;
+            margin-left: 1.2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .responsibilities li {
+            margin-bottom: 0.3rem;
+        }
+
+        .about-text {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .references {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .reference-item {
+            font-size: 0.9rem;
+        }
+
+        .reference-name {
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .reference-contact {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .resume {
+                grid-template-columns: 1fr;
+            }
+            
+            .references {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume">
+        <div class="left-column">
+            <div class="section">
+                <h2 class="section-title">Contact</h2>
+                <ul class="contact-info">
+                    <li>📱 +123-456-7890</li>
+                    <li>📧 olivia@email.com</li>
+                    <li>📍 New York, USA</li>
+                    <li>🌐 www.website.com</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Education</h2>
+                <div class="education-item">
+                    <div class="date">2015 - 2019</div>
+                    <div class="company">Master's Degree</div>
+                    <div class="job-description">University Name</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Skills</h2>
+                <ul class="skills-list">
+                    <li>Project Management</li>
+                    <li>Team Leadership</li>
+                    <li>Communication</li>
+                    <li>Problem Solving</li>
+                    <li>Strategic Planning</li>
+                    <li>Data Analysis</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Language</h2>
+                <ul class="language-list">
+                    <li>English (Native)</li>
+                    <li>Spanish (Fluent)</li>
+                    <li>French (Basic)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="right-column">
+            <div class="profile-section">
+                <img src="./person.jpg" alt="Profile Photo" class="profile-img">
+                <div class="name-title">
+                    <h1 class="name">Olivia Sanchez</h1>
+                    <div class="title">Marketing Manager</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">About Me</h2>
+                <p class="about-text">
+                    Experienced Marketing Manager with a demonstrated history of working in the marketing industry. 
+                    Skilled in Digital Strategy, Marketing Management, and Team Leadership. Strong marketing professional 
+                    with a Master's Degree focused in Marketing.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Experience</h2>
+                <div class="experience-item">
+                    <div class="date">Jan 2020 - Present</div>
+                    <div class="company">Senior Marketing Manager</div>
+                    <div class="job-description">Company Name, Location</div>
+                    <ul class="responsibilities">
+                        <li>Led digital marketing campaigns across multiple platforms</li>
+                        <li>Managed a team of 5 marketing professionals</li>
+                        <li>Increased social media engagement by 150%</li>
+                        <li>Developed and implemented marketing strategies</li>
+                    </ul>
+                </div>
+
+                <div class="experience-item">
+                    <div class="date">Jun 2017 - Dec 2019</div>
+                    <div class="company">Marketing Specialist</div>
+                    <div class="job-description">Company Name, Location</div>
+                    <ul class="responsibilities">
+                        <li>Executed marketing campaigns across various channels</li>
+                        <li>Created content for social media platforms</li>
+                        <li>Analyzed marketing metrics and prepared reports</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">References</h2>
+                <div class="references">
+                    <div class="reference-item">
+                        <div class="reference-name">John Smith</div>
+                        <div class="reference-contact">Marketing Director</div>
+                        <div class="reference-contact">john@email.com</div>
+                    </div>
+                    <div class="reference-item">
+                        <div class="reference-name">Sarah Johnson</div>
+                        <div class="reference-contact">Senior Manager</div>
+                        <div class="reference-contact">sarah@email.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
