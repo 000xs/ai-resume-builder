@@ -1,8 +1,13 @@
 import axios from "axios";
 
 const fetchSummary = async (userData) => {
+  const sendData = {
+    Education: userData.Education,
+    JobExperience: userData.JobExperience,
+    Skills: userData.Skills
+  }
     try {
-      const response = await axios.post("/api/generate-content", userData, {
+      const response = await axios.post("/api/generate-content",sendData, {
         headers: {
           "Content-Type": "application/json",
         },

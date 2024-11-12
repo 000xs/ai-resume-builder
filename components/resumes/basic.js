@@ -102,8 +102,8 @@ const Basic = ({ userData }) => {
               </div>
               <div className="text-xs mb-2">{job.description}</div>
               <div className="text-xs font-medium">
-                {formatDateString(job.startDate)} —{" "}
-                {formatDateString(job.endDate)}
+                {formatDateString(job.jobStart)} —{" "}
+                {formatDateString(job.jobEnd)}
               </div>
             </div>
           ))}

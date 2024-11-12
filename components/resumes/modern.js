@@ -123,7 +123,7 @@ const Modern = ({ userData }) => {
                             <div key={index} className="experience-item relative mb-4 pl-5">
                                 <span className="absolute left-0 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full bg-gray-800"></span>
                                 <div className="date text-gray-600">
-                                    {job.startDate} - {job.endDate}
+                                    {formatDateString(job.jobStart)} - {formatDateString(job.jobEnd)}
                                 </div>
                                 <div className="company text-gray-600">
                                     {job.companyName} | {job.companyLocation}

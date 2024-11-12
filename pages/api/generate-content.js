@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { personalData, JobExperience, Skills, Education } = req.body;
+  const { JobExperience, Skills, Education } = req.body;
 
   const prompt = `
   Generate a professional resume summary for a candidate with the following details:

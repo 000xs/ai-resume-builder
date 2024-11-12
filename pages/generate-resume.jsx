@@ -7,10 +7,12 @@ import { FileText, Check, Loader2 } from 'lucide-react'
 import dynamic from 'next/dynamic';
  
 
+
 const GeneratePDF = dynamic(() => import('@/components/GeneratePDF'), { ssr: false });
 const CVTemplate = dynamic(() => import('@/components/CVTemplate'), { ssr: false });
 const Basic = dynamic(() => import('@/components/resumes/basic'), { ssr: false });
 const Modern = dynamic(() => import('@/components/resumes/modern'), { ssr: false });
+const NextLevel = dynamic(() => import('@/components/resumes/nextlevel'), { ssr: false });
 
 
 
@@ -494,8 +496,29 @@ const GenerateResume = () => {
                   This may take a few moments. Thank you for your patience!
                 </p>
                 {/* <CVTemplate userData={userData} /> */}
-                {/* <Basic userData={userData} /> */}
-                <Modern userData={userData}/>
+
+                {/* <Modern userData={userData} /> */}
+                <NextLevel userData={userData} />
+                {
+                  selectedTemplate === '1' && (
+                    <Basic userData={userData} />
+                  )
+                }
+                {
+                  selectedTemplate === '2' && (
+                    <Modern userData={userData} />
+                  )
+                }
+                {
+                  selectedTemplate === '3' && (
+                    <Modern userData={userData} />
+                  )
+                }
+                {
+                  selectedTemplate === '4' && (
+                    <NextLevel userData={userData} />
+                  )
+                }
               </div>
             </div>
           </Fragment>
