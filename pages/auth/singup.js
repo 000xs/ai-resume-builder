@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { isAuthenticated, registerUser } from "@/utils/auth"; // Adjust import as necessary
+import { registerUser } from "@/utils/auth"; // Adjust import as necessary
 import Navigationbar from "@/components/Navigationbar";
-import Error from "@/components/Error"; // Ensure you have an Error component
+// Ensure you have an Error component
 import Link from "next/link";
 import { account } from "@/utils/appwrite";
 import Image from "next/image";
@@ -18,7 +18,7 @@ const SignupPage = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     const getUser = async () => {
-        // account.createVerification('http://localhost:3000/verify');
+      // account.createVerification('http://localhost:3000/verify');
       setUser(await account.get());
     };
     getUser();

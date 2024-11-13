@@ -1,6 +1,6 @@
 import Navigationbar from "@/components/Navigationbar";
 import { templates } from "@/data/templates";
-import axios from "axios";
+ 
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { FileText, Check, Loader2 } from 'lucide-react'
@@ -12,8 +12,7 @@ import Image from "next/image";
 
 
 
-const GeneratePDF = dynamic(() => import('@/components/GeneratePDF'), { ssr: false });
-const CVTemplate = dynamic(() => import('@/components/CVTemplate'), { ssr: false });
+ 
 const Basic = dynamic(() => import('@/components/resumes/basic'), { ssr: false });
 const Modern = dynamic(() => import('@/components/resumes/modern'), { ssr: false });
 const NextLevel = dynamic(() => import('@/components/resumes/nextlevel'), { ssr: false });
