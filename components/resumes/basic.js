@@ -1,4 +1,3 @@
-
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
@@ -14,7 +13,6 @@ const formatDateString = (dateString) => {
   const date = new Date(year, month - 1); // Month is 0-indexed in JavaScript
   return date.toLocaleString("default", { month: "long", year: "numeric" });
 };
-
 
 const Basic = ({ userData }) => {
   const handlePrint = async () => {
@@ -50,10 +48,8 @@ const Basic = ({ userData }) => {
         const splitSummary = summaryData.summaryText.split("**");
 
         // Filter out any empty strings from the resulting array
-        const formattedSummary = splitSummary.filter(
-          (part) => part.trim() !== ""
-        );
-
+        const formattedSummary = splitSummary.filter(part => part.trim() !== "");
+        
         setSummary(formattedSummary.join(""));
         console.log("Fetched Summary:", summaryData.summaryText);
       } catch (error) {
@@ -75,8 +71,7 @@ const Basic = ({ userData }) => {
             <div className="text-lg font-normal">{userData.role}</div>
           </div>
           <div className="text-sm text-gray-700 mb-5">
-            {userData.personalData.location} | {userData.personalData.tel} |
-            {userData.personalData.email}
+            {userData.personalData.location} | {userData.personalData.tel} | {userData.personalData.email}
           </div>
         </div>
 
@@ -116,7 +111,7 @@ const Basic = ({ userData }) => {
           {userData.Education.map((edu, index) => (
             <div key={index} className="mb-2">
               <div className="flex justify-between font-bold">
-                <span>{`${edu.degreeName}`}</span>
+                <span>{edu.degreeName}</span>
                 <span>
                   {formatDateString(edu.start)} -{" "}
                   {formatDateString(edu.graduation)}
@@ -135,14 +130,19 @@ const Basic = ({ userData }) => {
             {skills.map((skill) => (
               <div key={skill} className="flex justify-between">
                 <span>{skill}</span>
-                <span>Expert</span>
+                <span>Expert</span> {/* You might want to adjust this based on skill level */}
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <button className="w-full border border-b-4 px-4 border-black hover:border-b py-2" onClick={handlePrint}>Downlode Resume</button>
+      <button 
+        className="w-full border border-b-4 px-4 border-black hover:border-b py-2" 
+        onClick={handlePrint}
+      >
+        Download Resume
+      </button>
     </Fragment>
   );
 };
