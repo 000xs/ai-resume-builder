@@ -228,7 +228,7 @@ const GenerateResume = () => {
                         }`}
                         onClick={() => handleTemplateSelect(item)}
                       >
-                        <Image src={item.previewImage} width={186} height={326} />
+                        <img src={item.previewImage} width={186} height={326} />
                         <h2 className="text-xl">{item.name}</h2>
 
                       </div>
