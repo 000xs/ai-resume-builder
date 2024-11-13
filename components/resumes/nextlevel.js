@@ -64,7 +64,7 @@ const NextLevel = ({ userData }) => {
     getSummary();
   }, [userData]);
   return (
-    <Fragment>
+    <Fragment className="flex flex-col">
       <div id="content" className="resume w-full max-w-4xl bg-white grid grid-cols-1 md:grid-cols-3 shadow-lg">
         <div className="left-column bg-gray-800 text-white space-y-4 p-6">
           <div className="section ">
@@ -173,7 +173,7 @@ const NextLevel = ({ userData }) => {
           */}
         </div>
       </div>
-      <button onClick={handlePrint}>Downlode PDF</button>
+      <button className="w-full border border-b-4 px-4 border-black hover:border-b py-2" onClick={handlePrint}>Downlode Resume</button>
     </Fragment>
   );
 };

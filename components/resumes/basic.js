@@ -16,6 +16,7 @@ const formatDateString = (dateString) => {
   return date.toLocaleString("default", { month: "long", year: "numeric" });
 };
 
+
 const Basic = ({ userData }) => {
   const handlePrint = async () => {
     try {
@@ -142,12 +143,7 @@ const Basic = ({ userData }) => {
         </div>
       </div>
 
-      <button
-        onClick={handlePrint}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Download
-      </button>
+      <button className="w-full border border-b-4 px-4 border-black hover:border-b py-2" onClick={handlePrint}>Downlode Resume</button>
     </Fragment>
   );
 };

@@ -140,7 +140,7 @@ const Modern = ({ userData }) => {
                 </div>
             </div>
 
-            <button onClick={handlePrint}>Downlode</button>
+            <button className="w-full border border-b-4 px-4 border-black hover:border-b py-2" onClick={handlePrint}>Downlode Resume</button>
 
             {/* Add corresponding Tailwind CSS styles for layout */}
         </Fragment>

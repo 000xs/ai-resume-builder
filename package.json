@@ -12,7 +12,7 @@
     "@google/generative-ai": "^0.21.0",
     "@hookform/resolvers": "^3.9.1",
     "@sparticuz/chromium-min": "^130.0.0",
-    "appwrite": "14.0.1",
+    "appwrite": "^16.0.2",
     "axios": "^1.7.7",
     "docx": "^9.0.3",
     "dotenv": "^16.4.5",
