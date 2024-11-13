@@ -6,7 +6,7 @@ import fetchSummary from "@/utils/fetchSummary";
 const formatDateString = (dateString) => {
   if (typeof dateString !== "string") {
     console.error("Invalid date string:", dateString);
-    return dateString; // Return an empty string or a default value
+    return ""; // Return an empty string for invalid input
   }
 
   const [year, month] = dateString.split("-");
@@ -37,7 +37,7 @@ const Basic = ({ userData }) => {
     }
   };
 
-  const [skills, setSkills] = useState(userData.Skills);
+  const [skills, setSkills] = useState(userData.Skills || []); // Default to an empty array if undefined
   const [summary, setSummary] = useState("");
 
   useEffect(() => {
