@@ -2,6 +2,7 @@ import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
+import Image from "next/image";
 
 // Utility function to format date strings
 // Utility function to format date strings

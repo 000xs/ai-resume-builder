@@ -1,10 +1,12 @@
+import Image from "next/image";
+
 const Footer = () => {
     return (
         <div className="bg-white py-8 px-28 border-t flex flex-row pb-36 justify-between">
             <div className="left">
                 <h1 className="font-bold">Get started</h1>
                 <p>Trusted scince 2024</p>
-                <img src="donate.webp" width={128} height={32} alt="" srcset="" />
+                <Image src="donate.webp" width={128} height={32} alt="" srcset="" />
 
             </div>
             <div className="right">

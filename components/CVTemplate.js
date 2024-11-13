@@ -1,6 +1,7 @@
 // components/CVTemplate.js
 import React from "react";
 import html2pdf from "html2pdf.js";
+import Image from "next/image";
 
 const CVTemplate = ({ userData }) => {
   const handlePrint = async () => {
@@ -28,7 +29,7 @@ const CVTemplate = ({ userData }) => {
   return (
     <div>
       <div id="content" style={{ padding: "20px", backgroundColor: "#f5f5f5" }}>
-        <img src={userData.personalData.image} alt="" srcset="" />
+        <Image src={userData.personalData.image} alt="" srcset="" />
         <h1>{userData.personalData.fullname}</h1>
         <p>{userData.personalData.location}</p>
         <p>Tel: {userData.personalData.tel}</p>
