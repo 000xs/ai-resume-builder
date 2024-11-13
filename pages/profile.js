@@ -24,7 +24,7 @@ export default function ProfilePage() {
     // In a real application, you would clear the user's session/token here
     // For now, we'll just redirect to the login page
     logoutUser();
-    router.push("/auth/login");
+    router.push("/auth/singin");
   };
 
   if (!user) {
