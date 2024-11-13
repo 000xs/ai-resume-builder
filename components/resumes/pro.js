@@ -1,11 +1,9 @@
-// import { Progress } from "@/components/ui/progress"; // Uncomment if you have a Progress component
 import { MapPin, Mail, Phone, Globe } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
- 
+import Image from "next/image";
 
-// / Utility function to format date strings
 // Utility function to format date strings
 const formatDateString = (dateString) => {
   if (typeof dateString !== "string") {
@@ -19,6 +17,9 @@ const formatDateString = (dateString) => {
 };
 
 export default function Pro({ userData }) {
+  const [skills, setSkills] = useState(userData.Skills);
+  const [summary, setSummary] = useState("");
+
   const handlePrint = async () => {
     try {
       const element = document.getElementById("content");
@@ -41,21 +42,16 @@ export default function Pro({ userData }) {
     }
   };
 
-  const [skills, setSkills] = useState(userData.Skills);
-  const [summary, setSummary] = useState("");
-
   useEffect(() => {
     const getSummary = async () => {
       try {
         const summaryData = await fetchSummary(userData);
         // Split the string by '**'
         const splitSummary = summaryData.summaryText.split("**");
-
         // Filter out any empty strings from the resulting array
         const formattedSummary = splitSummary.filter(
           (part) => part.trim() !== ""
         );
-
         setSummary(formattedSummary.join(""));
         console.log("Fetched Summary:", summaryData.summaryText);
       } catch (error) {
@@ -67,7 +63,7 @@ export default function Pro({ userData }) {
   }, [userData]);
 
   return (
-    <Fragment className="flex flex-col">
+    <Fragment>
       <div id="content" className="grid grid-cols-1 md:grid-cols-12">
         {/* Left Column */}
         <div className="bg-zinc-800 p-8 md:col-span-5 relative">
@@ -78,11 +74,8 @@ export default function Pro({ userData }) {
               style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 80%)" }}
             />
             <div className="relative h-48 w-48 mx-auto overflow-hidden rounded-full border-4 border-white">
-              <img
-                src={
-                  userData.personalData.image ||
-                  "/favicon.ico"
-                }
+              <Image
+                src={userData.personalData.image || "/favicon.ico"}
                 alt={userData.personalData.fullname}
                 className="h-full w-full object-cover"
               />
@@ -125,7 +118,8 @@ export default function Pro({ userData }) {
                   <h3 className="font-bold">{edu.institution}</h3>
                   <p>{edu.degreeName}</p>
                   <p>
-                    {formatDateString(edu.start)} - {formatDateString(edu.graduation)}
+                    {formatDateString(edu.start)} -{" "}
+                    {formatDateString(edu.graduation)}
                   </p>
                 </div>
               ))}
@@ -148,6 +142,7 @@ export default function Pro({ userData }) {
             <h2 className="flex items-center font-bold mb-4">
               <span className="text-amber-500 mr-2">●</span> ABOUT ME
             </h2>
+            {/* Ensure summary is a string before rendering */}
             <p className="text-gray-600">{summary}</p>
           </div>
 
@@ -162,7 +157,8 @@ export default function Pro({ userData }) {
                   <div className="flex justify-between mb-2">
                     <h3 className="font-bold">{job.jobTitle}</h3>
                     <span className="text-gray-600">
-                      {formatDateString(job.jobStart)} - {formatDateString(job.jobEnd)}
+                      {formatDateString(job.jobStart)} -{" "}
+                      {formatDateString(job.jobEnd)}
                     </span>
                   </div>
                   <p className="text-gray-600 mb-2">
@@ -182,16 +178,17 @@ export default function Pro({ userData }) {
             {skills.map((skill, index) => (
               <div key={index} className="flex justify-between mb-2">
                 <span>{skill}</span>
-                {/* Uncomment below if you have a Progress component */}
-                {/*<Progress value={skill.level} />*/}
-                {/* Assuming skill.level is a percentage */}
-                {/*<span>{skill.level}%</span>*/}
               </div>
             ))}
           </div>
         </div>
       </div>
-      <button className="w-full border border-b-4 px-4 border-black hover:border-b py-2" onClick={handlePrint}>Downlode Resume</button>
+      <button
+        className="w-full border border-b-4 px-4 border-black hover:border-b py-2"
+        onClick={handlePrint}
+      >
+        Downlode Resume
+      </button>
     </Fragment>
   );
 }

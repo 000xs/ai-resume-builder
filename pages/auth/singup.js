@@ -4,6 +4,7 @@ import Navigationbar from "@/components/Navigationbar";
 import Error from "@/components/Error"; // Ensure you have an Error component
 import Link from "next/link";
 import { account } from "@/utils/appwrite";
+import Image from "next/image";
 // import handler from "../api/generate-content";
 
 const SignupPage = () => {
@@ -107,7 +108,7 @@ const SignupPage = () => {
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
                     {photo ? (
-                      <img
+                      <Image
                         src={photo}
                         alt="Profile"
                         className="w-full h-full rounded-full object-cover"

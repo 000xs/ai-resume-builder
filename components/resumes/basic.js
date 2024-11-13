@@ -1,9 +1,8 @@
-import axios from "axios";
+
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
 
-// Utility function to format date strings
 // Utility function to format date strings
 const formatDateString = (dateString) => {
   if (typeof dateString !== "string") {

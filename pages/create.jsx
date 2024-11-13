@@ -7,6 +7,7 @@ import { FileText, Check, Loader2 } from 'lucide-react'
 import dynamic from 'next/dynamic';
 import { checkSession } from "@/utils/auth";
 import { account } from "@/utils/appwrite";
+import Image from "next/image";
 
 
 
@@ -227,7 +228,7 @@ const GenerateResume = () => {
                         }`}
                         onClick={() => handleTemplateSelect(item)}
                       >
-                        <img src={item.previewImage} width={186} height={326} />
+                        <Image src={item.previewImage} width={186} height={326} />
                         <h2 className="text-xl">{item.name}</h2>
 
                       </div>
@@ -251,16 +252,14 @@ const GenerateResume = () => {
                     <div className="flex flex-col items-center">
                       <label htmlFor="file-upload" className="cursor-pointer">
                         <div className="flex items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded-full bg-gray-50 hover:bg-gray-100 transition duration-200">
-                          {imageSrc ? (
-                            <img
+                          {imageSrc && (
+                            <Image
                               src={imageSrc}
                               alt="Profile Image"
                               layout="fill"
                               className="object-cover rounded-full"
                             />
-                          ) : (
-                            <AiOutlineUpload className="text-gray-400 text-4xl" />
-                          )}
+                          )   }
                         </div>
                         <input
                           id="file-upload"

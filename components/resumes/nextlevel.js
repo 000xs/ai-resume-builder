@@ -111,7 +111,7 @@ const NextLevel = ({ userData }) => {
 
         <div className="right-column p-6 bg-white md:col-span-2">
           <div className="profile-section flex items-center mb-6">
-            <img
+            <Image
               src={userData.personalData.image}
               alt="Profile Photo"
               className="profile-img w-24 h-24 rounded-full object-cover mr-4"
