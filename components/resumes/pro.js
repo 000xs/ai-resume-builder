@@ -2,7 +2,6 @@ import { MapPin, Mail, Phone, Globe } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
-import Image from "next/image";
 
 // Utility function to format date strings
 const formatDateString = (dateString) => {
@@ -74,7 +73,7 @@ export default function Pro({ userData }) {
               style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 80%)" }}
             />
             <div className="relative h-48 w-48 mx-auto overflow-hidden rounded-full border-4 border-white">
-              <Image
+              <img
                 src={userData.personalData.image || "/favicon.ico"}
                 alt={userData.personalData.fullname}
                 className="h-full w-full object-cover"

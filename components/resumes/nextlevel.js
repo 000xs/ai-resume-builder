@@ -2,7 +2,6 @@ import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
-import Image from "next/image";
 
 // Utility function to format date strings
 // Utility function to format date strings
@@ -112,7 +111,7 @@ const NextLevel = ({ userData }) => {
 
         <div className="right-column p-6 bg-white md:col-span-2">
           <div className="profile-section flex items-center mb-6">
-            <Image
+            <img
               src={userData.personalData.image}
               alt="Profile Photo"
               className="profile-img w-24 h-24 rounded-full object-cover mr-4"

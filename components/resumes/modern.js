@@ -3,7 +3,6 @@ import { Fragment, useEffect, useState } from "react";
 
 import html2pdf from "html2pdf.js";
 import fetchSummary from "@/utils/fetchSummary";
-import Image from "next/image";
 
 // Utility function to format date strings
 const formatDateString = (dateString) => {
@@ -69,7 +68,7 @@ const Modern = ({ userData }) => {
             <div id="content" className="resume w-full   bg-white  grid grid-cols-1 md:grid-cols-3">
                 <div className="left-column bg-gray-800 text-white p-6">
                     <div className="profile-img mb-6">
-                        <Image
+                        <img
                             src={userData.personalData.image}
                             alt="Profile Photo"
                             className="w-48 h-48 rounded-full mx-auto"
