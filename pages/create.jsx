@@ -1,6 +1,6 @@
 import Navigationbar from "@/components/Navigationbar";
 import { templates } from "@/data/templates";
- 
+
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import { FileText, Check, Loader2 } from 'lucide-react'
@@ -8,11 +8,12 @@ import dynamic from 'next/dynamic';
 import { checkSession } from "@/utils/auth";
 import { account } from "@/utils/appwrite";
 import Image from "next/image";
+import Head from "next/head";
 
 
 
 
- 
+
 const Basic = dynamic(() => import('@/components/resumes/basic'), { ssr: false });
 const Modern = dynamic(() => import('@/components/resumes/modern'), { ssr: false });
 const NextLevel = dynamic(() => import('@/components/resumes/nextlevel'), { ssr: false });
@@ -219,6 +220,14 @@ const GenerateResume = () => {
           <div className="container border w-auto h-auto mx-28 my-8  justify-center flex">
             {istempleteSelect &&
               <Fragment>
+                <Head>
+                  <title>Create Resume - ResumeGenius</title>
+                  <link
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+                    rel="stylesheet"
+                  />
+                </Head>
+                
                 <div className="container-templete px-4 space-y-4 py-8 flex flex-col items-center w-full">
                   <h1 className=" text-xl">Chosee Your templaet</h1>
                   <div className="templtes flex flex-grow space-x-6">
@@ -258,7 +267,7 @@ const GenerateResume = () => {
                               layout="fill"
                               className="object-cover rounded-full"
                             />
-                          )   }
+                          )}
                         </div>
                         <input
                           id="file-upload"
@@ -595,7 +604,7 @@ const GenerateResume = () => {
           </div>
         </Fragment>
 
-      ):(
+      ) : (
         <Fragment>Not autheer rized</Fragment>
       )}
 

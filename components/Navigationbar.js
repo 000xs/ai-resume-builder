@@ -42,13 +42,19 @@ const Navigationbar = () => {
         >
           Get
         </li>
-        <li className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
+        <li 
+        onClick={() => router.push("/how-it-works")}
+        className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
           How it works
         </li>
-        <li className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
+        <li
+        onClick={() => router.push("/faq")} 
+          className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
           FAQ
         </li>
-        <li className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
+        <li
+        onClick={() => router.push("/pricing")} 
+          className="hover:border-b-2 hover:border-b-black hover:cursor-pointer">
           Pricing
         </li>
       </ul>
