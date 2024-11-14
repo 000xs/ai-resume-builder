@@ -25,7 +25,7 @@ export default function LoginPage() {
 
     try {
       const err = await loginUser(email, password);
-      setUser(await account.createEmailPasswordSession(email, password));
+      // setUser(await account.createEmailPasswordSession(email, password));
 
       console.log(err);
 

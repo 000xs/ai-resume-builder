@@ -605,7 +605,16 @@ const GenerateResume = () => {
         </Fragment>
 
       ) : (
-        <Fragment>Not autheer rized</Fragment>
+        <Fragment>
+          <Navigationbar />
+          <div className="w-full font-sans space-y-2 h-full bg-white flex items-center flex-col p-28 justify-center">
+            <h1 className="text-2xl font-bold">User Not Logged!</h1>
+            <p 
+            onClick={() => router.push('/auth/singin')}
+            className="hover:underline font-semibold">Pleas Login Click This!</p>
+
+          </div>
+        </Fragment>
       )}
 
     </main>

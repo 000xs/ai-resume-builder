@@ -14,7 +14,7 @@ const registerUser = async (email, password, name) => {
 // Function to log in a user
 const loginUser = async (email, password) => {
   try {
-    await account.createEmailPasswordSession(email, password);
+    const data = await account.createEmailPasswordSession(email, password);
     console.log("User logged in");
     return null;
   } catch (error) {
